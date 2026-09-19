@@ -1,0 +1,266 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Design tokens — three appearance modes.
+   Values are space-separated RGB triplets so Tailwind opacity modifiers work.
+   ───────────────────────────────────────────────────────────────────────────── */
+:root,
+:root[data-theme='light'] {
+  --bg: 244 246 248;
+  --surface: 255 255 255;
+  --surface-2: 240 242 245;
+  --border: 222 226 233;
+  --fg: 18 25 37;
+  --muted: 88 101 120;
+  --subtle: 128 140 158;
+  --primary: 79 107 255;
+  --primary-ink: 50 74 222;
+  --on-primary: 255 255 255;
+  --success: 50 196 141;
+  --success-ink: 13 120 82;
+  --warning: 232 168 62;
+  --warning-ink: 142 88 4;
+  --conflict: 225 91 100;
+  --conflict-ink: 185 40 52;
+  --hl: 250 204 21;
+  --hl-alpha: 0.42;
+  --shadow-card: 0 1px 2px rgb(16 24 40 / 0.05);
+  --shadow-pop: 0 14px 34px -10px rgb(16 24 40 / 0.22), 0 2px 6px rgb(16 24 40 / 0.06);
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: 11 15 20; /* #0B0F14 */
+  --surface: 17 23 32; /* #111720 */
+  --surface-2: 22 30 41;
+  --border: 32 41 54; /* #202936 */
+  --fg: 232 237 243; /* #E8EDF3 */
+  --muted: 142 154 170; /* #8E9AAA */
+  --subtle: 107 119 136;
+  --primary: 79 107 255; /* #4F6BFF */
+  --primary-ink: 135 156 255;
+  --on-primary: 255 255 255;
+  --success: 50 196 141;
+  --success-ink: 76 214 162;
+  --warning: 232 168 62;
+  --warning-ink: 240 190 102;
+  --conflict: 225 91 100;
+  --conflict-ink: 242 130 138;
+  --hl: 79 107 255;
+  --hl-alpha: 0.34;
+  --shadow-card: 0 1px 0 rgb(0 0 0 / 0.25);
+  --shadow-pop: 0 18px 40px -12px rgb(0 0 0 / 0.7), 0 2px 8px rgb(0 0 0 / 0.4);
+  color-scheme: dark;
+}
+
+/* Night: warmer, lower-contrast, subdued amber accent — built for long review sessions. */
+:root[data-theme='night'] {
+  --bg: 24 21 18;
+  --surface: 33 29 25;
+  --surface-2: 41 36 31;
+  --border: 60 54 46;
+  --fg: 222 213 199;
+  --muted: 161 151 137;
+  --subtle: 123 114 102;
+  --primary: 201 156 94;
+  --primary-ink: 224 187 128;
+  --on-primary: 38 29 18;
+  --success: 112 178 142;
+  --success-ink: 138 200 164;
+  --warning: 222 146 72;
+  --warning-ink: 232 172 106;
+  --conflict: 201 102 102;
+  --conflict-ink: 224 134 134;
+  --hl: 201 156 94;
+  --hl-alpha: 0.28;
+  --shadow-card: 0 1px 0 rgb(0 0 0 / 0.2);
+  --shadow-pop: 0 18px 40px -12px rgb(0 0 0 / 0.6), 0 2px 8px rgb(0 0 0 / 0.35);
+  color-scheme: dark;
+}
+
+/* Interface density scales every rem-based size. */
+html { font-size: 16px; }
+html[data-density='compact'] { font-size: 14.5px; }
+html[data-density='spacious'] { font-size: 17px; }
+
+@layer base {
+  *, ::before, ::after { border-color: rgb(var(--border)); }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    @apply bg-bg font-sans text-fg antialiased;
+    font-feature-settings: 'cv11', 'ss03';
+    overscroll-behavior-y: none;
+  }
+  :focus-visible {
+    outline: 2px solid rgb(var(--primary) / 0.9);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  ::selection { background: rgb(var(--primary) / 0.28); }
+  h1, h2, h3 { @apply tracking-tight; }
+}
+
+@layer components {
+  .card { @apply rounded-lg border border-line bg-surface shadow-card; }
+  .card-hover { @apply transition-colors duration-150 hover:border-primary/50; }
+  .section-label { @apply text-[11px] font-semibold uppercase tracking-[0.09em] text-subtle; }
+  .meta { @apply font-mono text-[11.5px] text-muted; }
+
+  .btn {
+    @apply inline-flex h-8 select-none items-center justify-center gap-1.5 whitespace-nowrap rounded-md px-3 text-[13px] font-medium transition-colors duration-150 disabled:pointer-events-none disabled:opacity-50;
+  }
+  .btn-sm { @apply h-7 px-2.5 text-xs; }
+  .btn-lg { @apply h-10 px-4 text-sm; }
+  .btn-primary { @apply bg-primary text-on-primary hover:brightness-110 active:brightness-95; }
+  .btn-secondary { @apply border border-line bg-surface text-fg hover:bg-s2; }
+  .btn-ghost { @apply text-muted hover:bg-s2 hover:text-fg; }
+  .btn-icon { @apply inline-flex h-8 w-8 items-center justify-center rounded-md text-muted transition-colors duration-150 hover:bg-s2 hover:text-fg; }
+
+  .input {
+    @apply h-9 w-full rounded-md border border-line bg-surface px-3 text-sm text-fg placeholder:text-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/25;
+  }
+  .textarea {
+    @apply w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-fg placeholder:text-subtle focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/25;
+  }
+  .kbd {
+    @apply inline-flex h-5 items-center rounded border border-line bg-s2 px-1.5 font-mono text-[10.5px] text-muted;
+  }
+
+  /* Source-traceability highlight */
+  .source-mark {
+    background: rgb(var(--hl) / var(--hl-alpha));
+    box-shadow: 0 0 0 2px rgb(var(--hl) / calc(var(--hl-alpha) * 0.7));
+    border-radius: 3px;
+    color: inherit;
+    padding: 0 1px;
+    animation: markIn 0.5s ease-out;
+  }
+  .source-para {
+    background: rgb(var(--hl) / 0.09);
+    box-shadow: inset 3px 0 0 rgb(var(--hl) / 0.95);
+  }
+  .paper {
+    @apply rounded-lg border border-line bg-surface shadow-card;
+  }
+
+  .skeleton { @apply relative overflow-hidden rounded bg-s2; }
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgb(var(--fg) / 0.06), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(rgb(var(--border) / 0.55) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--border) / 0.55) 1px, transparent 1px);
+    background-size: 44px 44px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 62% 38%, #000 25%, transparent 78%);
+    mask-image: radial-gradient(ellipse 80% 70% at 62% 38%, #000 25%, transparent 78%);
+  }
+
+  .scroll-thin { scrollbar-width: thin; scrollbar-color: rgb(var(--border)) transparent; }
+  .scroll-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+  .scroll-thin::-webkit-scrollbar-thumb { background: rgb(var(--border)); border-radius: 8px; }
+}
+
+@keyframes markIn {
+  from { box-shadow: 0 0 0 10px rgb(var(--hl) / 0); background: rgb(var(--hl) / 0); }
+}
+@keyframes shimmer { 100% { transform: translateX(100%); } }
+
+/* Smooth cross-fade between themes (class is added briefly by useApplyPreferences). */
+.theme-fade,
+.theme-fade *,
+.theme-fade *::before,
+.theme-fade *::after {
+  transition: background-color 0.28s ease, border-color 0.28s ease, color 0.28s ease, fill 0.28s ease, stroke 0.28s ease !important;
+}
+
+/* Reduce animations: user toggle and OS preference. */
+:root[data-motion='reduced'] *,
+:root[data-motion='reduced'] *::before,
+:root[data-motion='reduced'] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* React Flow theming (wrapper class: rf-theme). Higher specificity than the library CSS. */
+.rf-theme.react-flow { background: transparent; }
+.rf-theme .react-flow__controls { box-shadow: var(--shadow-card); border: 1px solid rgb(var(--border)); border-radius: 8px; overflow: hidden; }
+.rf-theme .react-flow__controls-button {
+  background: rgb(var(--surface));
+  border-bottom: 1px solid rgb(var(--border));
+  color: rgb(var(--muted));
+  fill: rgb(var(--muted));
+}
+.rf-theme .react-flow__controls-button:hover { background: rgb(var(--surface-2)); }
+.rf-theme .react-flow__controls-button svg { fill: currentColor; }
+.rf-theme .react-flow__minimap {
+  background: rgb(var(--surface));
+  border: 1px solid rgb(var(--border));
+  border-radius: 8px;
+  overflow: hidden;
+}
+.rf-theme .react-flow__minimap-mask { fill: rgb(var(--bg) / 0.72); }
+.rf-theme .react-flow__attribution { display: none; }
+.rf-theme .react-flow__edge-textbg { fill: rgb(var(--surface)); }
+.rf-theme .react-flow__edge-text { fill: rgb(var(--muted)); font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: 0.04em; }
+.rf-theme .react-flow__edge.selected .react-flow__edge-path { stroke-width: 2.6; }
+.rf-theme .react-flow__handle { opacity: 0; pointer-events: none; }
+.rf-theme .react-flow__node { cursor: pointer; }
+
+/* Landing-page animated relationship lines */
+.flow-line { stroke-dasharray: 5 7; animation: dash 1.6s linear infinite; }
+@keyframes dash { to { stroke-dashoffset: -24; } }
+
+/* Print: only the report preview is printed ("Export PDF"). */
+@media print {
+  @page { margin: 14mm; }
+  body { background: #fff !important; }
+  body * { visibility: hidden !important; }
+  #print-root, #print-root * { visibility: visible !important; }
+  #print-root { position: absolute; inset: 0; width: 100%; box-shadow: none !important; border: none !important; }
+  .no-print { display: none !important; }
+}
+
+/* React Flow: theme-aware background dots and minimap nodes (CSS beats SVG presentation attributes). */
+.rf-theme .react-flow__background-pattern { fill: rgb(var(--border)); stroke: rgb(var(--border)); }
+.rf-theme .react-flow__minimap-node { fill: rgb(var(--subtle) / 0.55); stroke: none; }
+
+/* Always-light palette for the printable report preview, regardless of app theme. */
+.report-light {
+  --bg: 255 255 255;
+  --surface: 255 255 255;
+  --surface-2: 244 246 248;
+  --border: 222 226 233;
+  --fg: 18 25 37;
+  --muted: 88 101 120;
+  --subtle: 128 140 158;
+  --primary: 79 107 255;
+  --primary-ink: 50 74 222;
+  --on-primary: 255 255 255;
+  --success: 50 196 141;
+  --success-ink: 13 120 82;
+  --warning: 232 168 62;
+  --warning-ink: 142 88 4;
+  --conflict: 225 91 100;
+  --conflict-ink: 185 40 52;
+  color-scheme: light;
+  color: rgb(var(--fg));
+  background: rgb(var(--surface));
+}
