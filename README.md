@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # NyayaSahayak: Human-in-the-Loop Hearing Evidence Auditor (frontend)
 
 A React + Vite + TypeScript frontend for a legal evidence-audit workspace. It turns case material into a traceable chain of
@@ -103,3 +104,6 @@ Suggested mapping:
 - Conflict sensitivity and authority depth are stored preferences. Findings are precomputed, so they do not re-run detection.
 - Redaction is pattern based and will miss identifiers. It is a demonstration, not a privacy control.
 - PDF export uses the browser print dialog against an always-light report layout.
+=======
+# NyayaSahayak
+>>>>>>> bc8819d9302547409a0e5535ff5306482930d99b
